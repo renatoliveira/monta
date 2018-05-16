@@ -1,0 +1,7 @@
+#!/bin/sh
+DRIVE="$(python drive_list.py | dmenu)"
+DESTINATION="$(python read_configs.py | dmenu)"
+
+echo "Mounting ${DRIVE} on ${DESTINATION}..."
+mount ${DRIVE} ${DESTINATION}
+
