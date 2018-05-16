@@ -1,7 +1,8 @@
 #!/bin/sh
 DRIVE="$(python drive_list.py | dmenu)"
-DESTINATION="$(python read_configs.py | dmenu)"
+if [ -z $DRIVE ]
+then
+	exit 0
+fi
 
-echo "Mounting ${DRIVE} on ${DESTINATION}..."
-mount ${DRIVE} ${DESTINATION}
-
+udisksctl mount -b "$(python monta.py $DRIVE)"
