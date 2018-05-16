@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
 	name='monta',
-	version='1.0',
+	version='1.1',
 	description='Disk mounting shortcut for use with dmenu.',
 	author='Renato Oliveira',
 	url='https://github.com/renatoliveira/monta',
