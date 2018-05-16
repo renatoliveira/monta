@@ -1,5 +1,9 @@
 #!/bin/sh
-DRIVE="$(monta-utils --drive-names | dmenu)"
+. "${HOME}/.cache/wal/colors.sh"
+fg=$color7
+bg=$color2
+DMENU="dmenu -nb $fg -nf $bg -sb $bg -sf $fg"
+DRIVE="$(monta-utils --drive-names | $DMENU)"
 if [ -z $DRIVE ]
 then
 	exit 0
