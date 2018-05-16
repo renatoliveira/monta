@@ -1,0 +1,7 @@
+#!/bin/sh
+DRIVE="$(monta-utils --drive-names | dmenu)"
+if [ -z $DRIVE ]
+then
+	exit 0
+fi
+udisksctl unmount -b "$(monta-utils --drive $DRIVE)"

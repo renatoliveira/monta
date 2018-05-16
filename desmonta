@@ -1,8 +1,0 @@
-#!/bin.sh
-DRIVE="$(python drive_list.py | dmenu)"
-if [ -z $DRIVE ]
-then
-	exit 0
-fi
-
-udisksctl unmount -b "$(python monta.py $DRIVE)"
