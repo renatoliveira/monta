@@ -3,9 +3,9 @@
 fg=$color7
 bg=$color2
 DMENU="dmenu -nb $fg -nf $bg -sb $bg -sf $fg"
-DRIVE="$(monta-utils --drive-names | $DMENU)"
+DRIVE="$(montautils --drive-names --unmounted | $DMENU)"
 if [ -z $DRIVE ]
 then
 	exit 0
 fi
-udisksctl mount -b "$(monta-utils --drive $DRIVE)"
+udisksctl mount -b "$(montautils --drive $DRIVE)"

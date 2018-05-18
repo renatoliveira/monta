@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+import json
+from sys import argv
+from sys import exit
+from subprocess import check_output
+
+
+def get_drive_by_name(drive_name):
+	'''
+	List all drives by name.
+	'''
+	disks = get_description()
+	for disk in disks['blockdevices']:
+		for partition in disk['children']:
+			if partition['label'] == drive_name:
+				return partition['name']
+
+def get_description():
+	'''
+	Returns the description by lsblk, in a json converted to dict.
+	'''
+	return json.loads(check_output('lsblk -pJf'.split(' ')))
+
+def get_drives(status='all'):
+	'''
+	Return drives with the specified option (mounted, unmounted or all).
+	Returns all drives if the parameter is not specified.
+	'''
+	disks = get_description()
+	drives = []
+	if 'blockdevices' in disks:
+		for disk in disks['blockdevices']:
+			for partition in disk['children']:
+				if partition['label'] != None and is_displayable(partition, status):
+					drives.append(partition['label'])
+	return drives
+
+def is_displayable(partition, status='all'):
+	'''
+	Returns a boolean value indicating if the drive should be displayed or
+	not, depending on the option passed (mounted, unmounted or all). Defaults
+	to 'all'.
+	'''
+	if status is 'mounted' and partition['mountpoint'] is None:
+		return False
+	if status is 'unmounted' and partition['mountpoint'] is not None:
+		return False
+	return True
+
+def display_drives(drives):
+	'''
+	Prints the drives names.
+	'''
+	for name in drives:
+		print(name)
+
+def run(argv):
+	if '--describe' in argv:
+		print(get_description())
+	if '--drive-names' in argv:
+		if '--all' in argv:
+			display_drives(get_drives())
+		elif '--mounted' in argv:
+			display_drives(get_drives('mounted'))
+		elif '--unmounted' in argv:
+			display_drives(get_drives('unmounted'))
+	if '--drive' in argv:
+		print(get_drive_by_name(argv[len(argv)-1]))
+
+if __name__ == '__main__':
+	run(argv)
+
